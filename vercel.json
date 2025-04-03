@@ -2,14 +2,14 @@
      "version": 2,
      "builds": [
        {
-         "src": "api/getOffice.js",
-         "use": "@vercel/node"
+         "src": "app.py",
+         "use": "@vercel/python"
        }
      ],
      "routes": [
        {
          "src": "/api/getOffice",
-         "dest": "/api/getOffice.js"
+         "dest": "/app.py"
        }
      ]
    }
