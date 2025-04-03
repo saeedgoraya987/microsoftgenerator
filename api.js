@@ -1,11 +1,11 @@
 const { StableDiffusionImg2ImgPipeline } = require('diffusers');
 const express = require('express');
-const cors = require('cors'); // Import CORS package
+const cors = require('cors');
 const { loadImage } = require('canvas'); 
 const axios = require('axios');
 
 const app = express();
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 
 app.get('/api/generate', async (req, res) => {
     const imageUrl = req.query.image;
@@ -31,20 +31,28 @@ app.get('/api/generate', async (req, res) => {
         res.send(buffer);
         
     } catch (error) {
-        console.error('Request URL:', imageUrl);
-        console.error('Error details:', error.message);
-        res.status(500).send('Error generating image');
+        console.error('Error generating image: ', error);
+        res.status(500).send('Error generating image: ' + error.message);
     }
 });
 
 const loadModel = async () => {
     const modelId = "nitrosocke/Ghibli-Diffusion";
-    return await StableDiffusionImg2ImgPipeline.from_pretrained(modelId);
+    try {
+        const model = await StableDiffusionImg2ImgPipeline.from_pretrained(modelId);
+        return model;
+    } catch (error) {
+        throw new Error('Failed to load model: ' + error.message);
+    }
 };
 
 const generateGhibliImage = async (image, pipe, strength) => {
     const prompt = "Ghibli-style anime painting, soft pastel colors, highly detailed, masterpiece";
-    return await pipe(prompt, { image, strength });
+    try {
+        return await pipe(prompt, { image, strength });
+    } catch (error) {
+        throw new Error('Failed to generate image: ' + error.message);
+    }
 };
 
 app.listen(3000, () => {
