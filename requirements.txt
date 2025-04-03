@@ -1,0 +1,5 @@
+Flask==2.1.2
+requests==2.26.0
+gunicorn==20.1.0  # WSGI HTTP server for UNIX
+Flask-Cors==3.0.10 # For handling Cross-Origin Resource Sharing
+python-dotenv==0.19.2 # For using .env files
